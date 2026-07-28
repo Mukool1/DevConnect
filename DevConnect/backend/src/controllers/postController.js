@@ -1,5 +1,5 @@
-import Post from "../models/post";
-import Notification from "../models/notification";
+import Post from "../models/post.js";
+import Notification from "../models/notification.js";
 
 export const createPost = async (req, res) => {
   try {
