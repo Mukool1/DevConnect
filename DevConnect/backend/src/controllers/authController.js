@@ -9,7 +9,7 @@ export const register = async (req, res) => {
     if (existingUser) {
       return res
         .status(409)
-        .json({ sucess: false, message: "User already exist" });
+        .json({ success: false, message: "User already exist" });
     }
     const hashedPassword = await bcrypt.hash(password, 12);
     const user = await User.create({
@@ -39,13 +39,13 @@ export const login = async (req, res) => {
     if (!user) {
       return res
         .status(401)
-        .json({ sucess: false, message: "Invalid Credentials" });
+        .json({ success: false, message: "Invalid Credentials" });
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res
         .status(401)
-        .json({ sucess: false, message: "Invalid Credentials" });
+        .json({ success: false, message: "Invalid Credentials" });
     }
     generateToken(res, user._id);
     res.status(200).json({
@@ -63,7 +63,7 @@ export const login = async (req, res) => {
 };
 export const logout = async (req, res) => {
   res.cookie("token", "", { maxAge: 0 });
-  return res.status(200).json({ sucess: true, message: "Logged out" });
+  return res.status(200).json({ success: true, message: "Logged out" });
 };
 export const getMe = async (req, res) => {
   try {
@@ -72,7 +72,8 @@ export const getMe = async (req, res) => {
       return res
         .status(404)
         .json({ success: false, message: "User not found" });
-    } 1
+    }
+    1;
     res.status(200).json({ success: true, user });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
