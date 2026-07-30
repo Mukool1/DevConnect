@@ -2,6 +2,8 @@ import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
+import ForgotPassword from "./pages/ForgotPassword.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
 import Feed from "./pages/Feed.jsx";
 import Profile from "./pages/Profile.jsx";
 import Notifications from "./pages/Notifications";
@@ -13,6 +15,8 @@ function App() {
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route
         path="/"
         element={
