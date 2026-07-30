@@ -16,17 +16,11 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-      const cleanOrigin = origin.replace(/\/$/, "");
-      if (allowedOrigins.includes(cleanOrigin)) {
-        return callback(null, true);
-      }
-      return callback(new Error(`CORS blocked for origin: ${origin}`));
-    },
+    origin: process.env.CLIENT_URL,
     credentials: true,
   }),
 );
+
 app.use(cookieParser());
 app.use(morgan("dev"));
 
