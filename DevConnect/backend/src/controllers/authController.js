@@ -113,7 +113,11 @@ export const forgotPassword = async (req, res) => {
     user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 minutes
     await user.save();
 
-    const resetUrl = `${process.env.CLIENT_URL}/reset-password/${rawToken}`;
+    const clientUrl = (process.env.CLIENT_URL || "http://localhost:5173").replace(
+      /\/$/,
+      "",
+    );
+    const resetUrl = `${clientUrl}/reset-password/${rawToken}`;
 
     try {
       await sendEmail({
@@ -125,12 +129,14 @@ export const forgotPassword = async (req, res) => {
                <p>If you didn't request this, you can safely ignore this email.</p>`,
       });
     } catch (emailError) {
+      console.error("Email send failed:", emailError.message);
       user.resetPasswordToken = undefined;
       user.resetPasswordExpire = undefined;
       await user.save();
-      return res
-        .status(500)
-        .json({ success: false, message: "Failed to send reset email" });
+      return res.status(500).json({
+        success: false,
+        message: emailError.message || "Failed to send reset email",
+      });
     }
 
     res.status(200).json({
