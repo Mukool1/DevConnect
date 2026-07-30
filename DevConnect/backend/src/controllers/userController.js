@@ -43,7 +43,41 @@ export const updateProfile = async (req, res) => {
       user,
     });
   } catch (err) {
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+export const getFollowers = async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.params.username }).populate(
+      "followers",
+      "name username avatar bio",
+    );
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+    res.status(200).json({ success: true, followers: user.followers });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+export const getFollowing = async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.params.username }).populate(
+      "following",
+      "name username avatar bio",
+    );
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+    res.status(200).json({ success: true, following: user.following });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 

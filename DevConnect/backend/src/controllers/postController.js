@@ -4,7 +4,7 @@ import Notification from "../models/notification.js";
 export const createPost = async (req, res) => {
   try {
     const { content, image, codeSnippet } = req.body;
-    const post = await Post.save({
+    const post = await Post.create({
       author: req.user._id,
       content,
       image,

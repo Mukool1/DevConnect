@@ -5,8 +5,8 @@ import protect from "../middlewares/authMiddleware.js";
 const userRouter = express.Router();
 
 userRouter.get("/:username", userController.getProfile);
-userRouter.post("/profile/update", protect, userController.updateProfile);
-userRouter.post("/follow/:id", protect, userController.followUser);
-userRouter.post("/unfollow/:id", protect, userController.unfollowUser);
+userRouter.put("/profile/update", protect, userController.updateProfile);
+userRouter.put("/follow/:id", protect, userController.followUser);
+userRouter.put("/unfollow/:id", protect, userController.unfollowUser);
 
 export default userRouter;
