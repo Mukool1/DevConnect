@@ -12,7 +12,16 @@ import {
   Camera,
   X,
   Check,
+  Link2,
+  Globe,
 } from "lucide-react";
+
+const normalizeUrl = (url) => {
+  if (!url) return "#";
+  return url.startsWith("http://") || url.startsWith("https://")
+    ? url
+    : `https://${url}`;
+};
 
 const Profile = () => {
   const { username } = useParams();
@@ -235,6 +244,59 @@ const Profile = () => {
                       </span>
                     ))}
                   </div>
+                </div>
+              )}
+
+              {(profile.socialLinks?.github ||
+                profile.socialLinks?.linkedin ||
+                profile.socialLinks?.twitter ||
+                profile.socialLinks?.portfolio) && (
+                <div className="flex flex-wrap gap-2 mb-6">
+                  Links:
+                  {profile.socialLinks?.github && (
+                    <a
+                      href={normalizeUrl(profile.socialLinks.github)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 px-3 py-1.5 rounded-xl transition-colors"
+                    >
+                      <Link2 size={14} />
+                      <span>GitHub</span>
+                    </a>
+                  )}
+                  {profile.socialLinks?.linkedin && (
+                    <a
+                      href={normalizeUrl(profile.socialLinks.linkedin)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 px-3 py-1.5 rounded-xl transition-colors"
+                    >
+                      <Link2 size={14} />
+                      <span>LinkedIn</span>
+                    </a>
+                  )}
+                  {profile.socialLinks?.twitter && (
+                    <a
+                      href={normalizeUrl(profile.socialLinks.twitter)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 px-3 py-1.5 rounded-xl transition-colors"
+                    >
+                      <Link2 size={14} />
+                      <span>Twitter</span>
+                    </a>
+                  )}
+                  {profile.socialLinks?.portfolio && (
+                    <a
+                      href={normalizeUrl(profile.socialLinks.portfolio)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 px-3 py-1.5 rounded-xl transition-colors"
+                    >
+                      <Globe size={14} />
+                      <span>Portfolio</span>
+                    </a>
+                  )}
                 </div>
               )}
 
