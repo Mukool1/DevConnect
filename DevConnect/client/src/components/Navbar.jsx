@@ -1,16 +1,31 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Home, Search, Bell, User, LogOut, Sun, Moon, Code2 } from "lucide-react";
+import {
+  Home,
+  Search,
+  Bell,
+  User,
+  LogOut,
+  Sun,
+  Moon,
+  Code2,
+} from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { useNotifications } from "../context/NotificationContext";
+import { MessageCircle } from "lucide-react";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+  const { unreadCount } = useNotifications();
   const navigate = useNavigate();
   const location = useLocation();
 
   const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem("theme") === "dark" || 
-      (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    return (
+      localStorage.getItem("theme") === "dark" ||
+      (!("theme" in localStorage) &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches)
+    );
   });
 
   useEffect(() => {
@@ -71,13 +86,29 @@ const Navbar = () => {
         <Link
           to="/notifications"
           title="Notifications"
-          className={`p-2.5 rounded-xl transition-all duration-200 ${
+          className={`relative p-2.5 rounded-xl transition-all duration-200 ${
             isActive("/notifications")
               ? "bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 font-semibold"
               : "text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800/60"
           }`}
         >
           <Bell size={20} />
+          {unreadCount > 0 && (
+            <span className="absolute top-1 right-1 min-w-[16px] h-4 px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center leading-none">
+              {unreadCount > 9 ? "9+" : unreadCount}
+            </span>
+          )}
+        </Link>
+        <Link
+          to="/messages"
+          title="Messages"
+          className={`p-2.5 rounded-xl transition-all duration-200 ${
+            isActive("/messages")
+              ? "bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 font-semibold"
+              : "text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800/60"
+          }`}
+        >
+          <MessageCircle size={20} />
         </Link>
         <Link
           to={`/profile/${user?.username}`}
@@ -114,4 +145,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

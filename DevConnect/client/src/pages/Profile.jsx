@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import Navbar from "../components/Navbar.jsx";
 import FollowListModal from "../components/FollowListModal.jsx";
@@ -15,6 +15,7 @@ import {
   Link2,
   Globe,
 } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 
 const normalizeUrl = (url) => {
   if (!url) return "#";
@@ -25,6 +26,7 @@ const normalizeUrl = (url) => {
 
 const Profile = () => {
   const { username } = useParams();
+  const navigate = useNavigate();
   const { user: currentUser, refreshUser } = useAuth();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -198,27 +200,36 @@ const Profile = () => {
                     <span>Edit Profile</span>
                   </button>
                 ) : (
-                  <button
-                    onClick={handleFollowToggle}
-                    disabled={followLoading}
-                    className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm ${
-                      isFollowing
-                        ? "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950/40 dark:hover:text-rose-400 border border-slate-200 dark:border-slate-700"
-                        : "bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white shadow-indigo-500/20"
-                    } disabled:opacity-50`}
-                  >
-                    {isFollowing ? (
-                      <>
-                        <UserCheck size={16} />
-                        <span>Following</span>
-                      </>
-                    ) : (
-                      <>
-                        <UserPlus size={16} />
-                        <span>Follow</span>
-                      </>
-                    )}
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => navigate(`/messages/${profile.username}`)}
+                      className="p-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700"
+                      title="Message"
+                    >
+                      <MessageCircle size={16} />
+                    </button>
+                    <button
+                      onClick={handleFollowToggle}
+                      disabled={followLoading}
+                      className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm ${
+                        isFollowing
+                          ? "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950/40 dark:hover:text-rose-400 border border-slate-200 dark:border-slate-700"
+                          : "bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white shadow-indigo-500/20"
+                      } disabled:opacity-50`}
+                    >
+                      {isFollowing ? (
+                        <>
+                          <UserCheck size={16} />
+                          <span>Following</span>
+                        </>
+                      ) : (
+                        <>
+                          <UserPlus size={16} />
+                          <span>Follow</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
                 )}
               </div>
 
@@ -252,7 +263,6 @@ const Profile = () => {
                 profile.socialLinks?.twitter ||
                 profile.socialLinks?.portfolio) && (
                 <div className="flex flex-wrap gap-2 mb-6">
-                  Links:
                   {profile.socialLinks?.github && (
                     <a
                       href={normalizeUrl(profile.socialLinks.github)}

@@ -1,5 +1,5 @@
 import User from "../models/user.js";
-import Notification from "../models/notification.js";
+import { createAndEmitNotification } from "../utils/notify.js";
 
 export const getProfile = async (req, res) => {
   try {
@@ -92,10 +92,9 @@ export const followUser = async (req, res) => {
     }
     const targetUser = await User.findById(targetId);
     if (!targetUser) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
     const alreadyFollowing = targetUser.followers.includes(req.user._id);
     if (alreadyFollowing) {
@@ -111,7 +110,7 @@ export const followUser = async (req, res) => {
     currentUser.following.push(targetId);
     await currentUser.save();
 
-    await Notification.create({
+    await createAndEmitNotification({
       recipient: targetId,
       sender: req.user._id,
       type: "follow",

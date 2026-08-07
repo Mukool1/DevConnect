@@ -1,5 +1,5 @@
 import Post from "../models/post.js";
-import Notification from "../models/notification.js";
+import { createAndEmitNotification } from "../utils/notify.js";
 
 export const createPost = async (req, res) => {
   try {
@@ -78,7 +78,7 @@ export const likePost = async (req, res) => {
     } else {
       post.likes.push(req.user._id);
       if (post.author.toString() !== req.user._id.toString()) {
-        await Notification.create({
+        await createAndEmitNotification({
           recipient: post.author,
           sender: req.user._id,
           type: "like",
@@ -112,7 +112,7 @@ export const addComment = async (req, res) => {
     await post.save();
 
     if (post.author.toString() !== req.user._id.toString()) {
-      await Notification.create({
+      await createAndEmitNotification({
         recipient: post.author,
         sender: req.user._id,
         type: "comment",

@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import api from "../api/axios";
 import Navbar from "../components/Navbar.jsx";
+import { useNotifications } from "../context/NotificationContext.jsx";
 import { Bell, CheckCheck, UserPlus, Heart, MessageSquare } from "lucide-react";
 
 const messages = {
@@ -24,24 +23,7 @@ const getNotificationIcon = (type) => {
 };
 
 const Notifications = () => {
-  const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const fetchNotifications = async () => {
-    setLoading(true);
-    const res = await api.get("/notifications");
-    setNotifications(res.data.notifications);
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    fetchNotifications();
-  }, []);
-
-  const handleMarkAllRead = async () => {
-    await api.put("/notifications/read-all");
-    fetchNotifications();
-  };
+  const { notifications, loading, markAllRead } = useNotifications();
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
@@ -58,7 +40,7 @@ const Notifications = () => {
           </div>
           {notifications.length > 0 && (
             <button
-              onClick={handleMarkAllRead}
+              onClick={markAllRead}
               className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/50 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 px-3 py-1.5 rounded-xl transition-all flex items-center gap-1.5"
             >
               <CheckCheck size={15} />
@@ -85,9 +67,7 @@ const Notifications = () => {
                 to={`/profile/${n.sender?.username}`}
                 key={n._id}
                 className={`flex items-center gap-3.5 p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors ${
-                  !n.read
-                    ? "bg-indigo-50/40 dark:bg-indigo-950/20"
-                    : ""
+                  !n.read ? "bg-indigo-50/40 dark:bg-indigo-950/20" : ""
                 }`}
               >
                 <div className="relative shrink-0">

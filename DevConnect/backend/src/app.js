@@ -8,6 +8,7 @@ import postRouter from "./routes/postRouter.js";
 import notificationRouter from "./routes/notificationRouter.js";
 import searchRouter from "./routes/searchRouter.js";
 import uploadRouter from "./routes/uploadRouter.js";
+import messageRouter from "./routes/messageRouter.js";
 
 const app = express();
 
@@ -36,5 +37,6 @@ app.use("/api/v1/posts", postRouter);
 app.use("/api/v1/notifications", notificationRouter);
 app.use("/api/v1/search", searchRouter);
 app.use("/api/v1/upload", uploadRouter);
+app.use("/api/v1/messages", messageRouter);
 
 export default app;

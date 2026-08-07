@@ -9,6 +9,8 @@ import Profile from "./pages/Profile.jsx";
 import Notifications from "./pages/Notifications";
 import Search from "./pages/Search";
 import NotFound from "./pages/NotFound.jsx";
+import Messages from "./pages/Messages.jsx";
+import Chat from "./pages/Chat.jsx";
 
 function App() {
   return (
@@ -46,6 +48,22 @@ function App() {
         element={
           <ProtectedRoute>
             <Search />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/messages"
+        element={
+          <ProtectedRoute>
+            <Messages />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/messages/:username"
+        element={
+          <ProtectedRoute>
+            <Chat />
           </ProtectedRoute>
         }
       />
